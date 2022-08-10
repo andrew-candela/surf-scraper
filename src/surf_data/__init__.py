@@ -1,0 +1,37 @@
+from dataclasses import dataclass
+from enum import Enum
+from typing import Dict, Optional
+
+
+class Spots(Enum):
+    pacifica="Pacifica State Beach"
+    montara="Montara State Beach"
+    rockaway="Rockaway State Beach"
+    princeton_jetty="Princeton Jetty"
+
+
+@dataclass
+class SurfSpotDetails:
+    nbdc_bouy_id: int
+    noaa_tide_station_id: int
+    surfline_spot_id: Optional[str]
+
+
+pacifica_to_half_moon_bay = SurfSpotDetails(
+    nbdc_bouy_id=46012,
+    noaa_tide_station_id=9414131,
+    surfline_spot_id="5842041f4e65fad6a7708976",
+)
+
+SPOT_MAPPING: Dict[str, SurfSpotDetails] = {
+    Spots.pacifica.value: pacifica_to_half_moon_bay,
+    Spots.montara.value: pacifica_to_half_moon_bay,
+    Spots.rockaway.value: pacifica_to_half_moon_bay,
+    Spots.princeton_jetty.value: pacifica_to_half_moon_bay,
+}
+
+class DynamoDBConfig:
+    TABLE_NAME = "SurfDiary"
+    REGION = "us-west-2"
+    PARTITION_KEY = "spot_name"
+    SORT_KEY = "entry_date"

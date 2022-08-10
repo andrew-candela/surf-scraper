@@ -1,0 +1,6 @@
+aiohttp
+ask-sdk-core
+ask-sdk-model
+ask-sdk-runtime
+bs4
+requests
