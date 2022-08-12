@@ -49,10 +49,10 @@ class ConditionReport:
     def serialize_for_alexa(self) -> str:
         return (
             f"The wind is coming from {self.wind_direction} with speed {self.wind_speed} and gusts up to {self.wind_gust}. "
-            f"The main swell is from {self.swell_direction} and is {self.swell_height} at {self.swell_period}. <break time=\"1s\"/>"
-            f"Secondary swell is from {self.wind_wave_direction} and is {self.wind_wave_height} at {self.wind_wave_period}. <break time=\"1s\"/>"
+            f"The main swell is from {self.swell_direction} and is {self.swell_height} at {self.swell_period}. <break time=\".5s\"/>"
+            f"Secondary swell is from {self.wind_wave_direction} and is {self.wind_wave_height} at {self.wind_wave_period}. <break time=\".5s\"/>"
             f"Wave steepness is {self.wave_steepness or 'missing'}. "
-        )
+        ).replace(" kts", " knots")
 
 
 TAG_TO_ATTRIBUTE_MAP = {    

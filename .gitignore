@@ -5,3 +5,5 @@ venv
 .env
 build
 *.egg-info
+.mypy_cache
+deployment_package

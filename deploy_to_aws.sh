@@ -6,7 +6,7 @@ FUNCTION_NAME=SurfDiary
 
 rm -rf deployment_package
 pip install -t deployment_package -r requirements/lambda_runtime.txt
-pip install -t deployment_package --upgrade .
+cp -r surf_data deployment_package
 
 (cd deployment_package && zip -r9 ../deployment.zip .)
 

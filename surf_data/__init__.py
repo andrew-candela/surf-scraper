@@ -8,6 +8,7 @@ class Spots(Enum):
     montara="Montara State Beach"
     rockaway="Rockaway State Beach"
     princeton_jetty="Princeton Jetty"
+    ocean_beach="Ocean Beach"
 
 
 @dataclass
@@ -23,11 +24,19 @@ pacifica_to_half_moon_bay = SurfSpotDetails(
     surfline_spot_id="5842041f4e65fad6a7708976",
 )
 
+ocean_beach = SurfSpotDetails(
+    nbdc_bouy_id=46237,
+    noaa_tide_station_id=9414290,
+    surfline_spot_id="5842041f4e65fad6a77087f8",
+)
+
+
 SPOT_MAPPING: Dict[str, SurfSpotDetails] = {
     Spots.pacifica.value: pacifica_to_half_moon_bay,
     Spots.montara.value: pacifica_to_half_moon_bay,
     Spots.rockaway.value: pacifica_to_half_moon_bay,
     Spots.princeton_jetty.value: pacifica_to_half_moon_bay,
+    Spots.ocean_beach.value: ocean_beach,
 }
 
 class DynamoDBConfig:

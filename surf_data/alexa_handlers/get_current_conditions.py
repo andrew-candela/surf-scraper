@@ -1,7 +1,7 @@
 import asyncio
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 import ask_sdk_core.utils as ask_utils
-from surf_data.lib.alexa_helpers import resolve_canonical_value
+from surf_data.lib.alexa_helpers import resolve_canonical_value, prepare_spot_check_farewell
 from surf_data.get_data import get_spot_data
 
 import typing
@@ -18,9 +18,9 @@ def prepare_spot_condition_report(spot: str) -> str:
     wave, tide = asyncio.run(get_spot_data(spot))
     return (
         f"Here's your report for {spot}. "
-        f"{tide.serialize_for_alexa()}"
-        f"{wave.serialize_for_alexa()}"
-        "<emphasis level=\"moderate\">Now go have fun you kook!</emphasis>"
+        f"{tide.serialize_for_alexa()} "
+        f"{wave.serialize_for_alexa()} "
+        f"{prepare_spot_check_farewell()}"
     )
 
 
