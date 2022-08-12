@@ -13,17 +13,17 @@ There's also an intent that reports current conditions for the spot I request.
 "Log an entry for {spot} at {time}"
 "Waves were soft, wind roughed things up etc etc"
 
-Alexa will collect the spot, the time and my notes.
-Then I'll have to go and get the data from surfline.
-I wonder if it's possible to get data in the past?
+Alexa will collect the spot, time and my notes.
+Then the handler will go and collect some wind, tide and wave data.
 
 ## Details
 
-I'll use DynamoDB as the persistence layer.
-The key will be the datetime that I made the log entry.
+DynamoDB is the persistence layer.
+Partition key is the spot I surfed and the sort key is the timestamp.
 The value will be a dictionary:
     time
     spot
     rating
     notes
     conditions: weather, wave and tide
+    etc
