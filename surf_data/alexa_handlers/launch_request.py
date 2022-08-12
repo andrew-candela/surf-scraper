@@ -1,18 +1,12 @@
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 import ask_sdk_core.utils as ask_utils
-from textwrap import dedent
+from surf_data.lib.alexa_helpers import prepare_greeting
 
 
 import typing
 if typing.TYPE_CHECKING:
     from ask_sdk_model import Response
     from ask_sdk_core.handler_input import HandlerInput
-
-
-HELP_TEXT = dedent("""
-    Welcome to the surf diary!
-    You can say, 'log an entry' or ask about conditions at Linda Mar.
-""")
 
 
 class LaunchRequestHandler(AbstractRequestHandler):
@@ -24,7 +18,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = HELP_TEXT
+        speak_output = prepare_greeting()
         return (
             handler_input.response_builder
                          .speak(speak_output)

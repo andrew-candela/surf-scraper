@@ -13,6 +13,24 @@ SPOT_CHECK_FAREWELLS = (
     "Now go splash around in the ocean you big kook.",
 )
 
+GREETINGS = (
+    (
+        "<amazon:emotion name=\"excited\" intensity=\"medium\">Hey, surf's up bro!</amazon:emotion> "
+        "I'm just kidding, I don't know if the surf is up. But I can check for you!"
+    ),
+    "Welcome to the Surf Log. Did you want to tell me about a surf?",
+    (
+        "Welcome to Surf Log. I want to hear about your surfing! "
+        "Keep in mind I don't actually care because I'm not alive."
+    ),
+    "Hi Andrew!",
+    (
+        "<amazon:emotion name=\"excited\" intensity=\"low\">"
+        "Hey bro, you getting ready to go shred the gnar?</amazon:emotion> "
+        "That's something surfers say... right?"
+    )
+)
+
 
 def resolve_canonical_value(intent_slot: "Slot") -> str:
     """
@@ -37,3 +55,6 @@ def prepare_log_entry_farewell(rating: str, notes: str) -> str:
             "Sounds rough. Did you at least maybe see some fish?",
             "Sounds tough. At least it was good exercise right?",
         ))
+
+def prepare_greeting():
+    return choice(GREETINGS)
