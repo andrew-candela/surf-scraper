@@ -94,7 +94,7 @@ class TidePredictions:
         Find the hour before and after and then compute the "slope", as well as interpolate
         current level.
         """
-        rounded_time = compute_time.replace(minute=0, second=0, microsecond=0)
+        rounded_time = compute_time.replace(minute=0, second=0, microsecond=0, tzinfo=None)
         for i, prediction in enumerate(self.predictions):
             if prediction.time == rounded_time:
                 return find_tide_change(prediction, self.predictions[i+1])
