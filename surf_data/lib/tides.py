@@ -74,9 +74,10 @@ def parse_tide_prediction(prediction: Dict[str, str]) -> "TidePrediction":
     return TidePrediction(dt, level)
 
 
-def find_tide_change(start: TidePrediction, end: TidePrediction) -> TideData:
-    tide_interval = round(end.level - start.level, 2)
-    return TideData(start.level, tide_interval)
+def find_tide_change(current_minute: int, start: TidePrediction, end: TidePrediction) -> TideData:
+    tide_interval = end.level - start.level
+    level = float(start.level) + (float(tide_interval) * (current_minute/60))
+    return TideData(round(level, 1), round(tide_interval, 1))
 
 
 @dataclass
@@ -97,7 +98,7 @@ class TidePredictions:
         rounded_time = compute_time.replace(minute=0, second=0, microsecond=0, tzinfo=None)
         for i, prediction in enumerate(self.predictions):
             if prediction.time == rounded_time:
-                return find_tide_change(prediction, self.predictions[i+1])
+                return find_tide_change(compute_time.minute, prediction, self.predictions[i+1])
         raise ValueError(
             f"There was no hourly interval containing your time of: {compute_time}"
         )

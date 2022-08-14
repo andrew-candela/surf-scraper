@@ -20,7 +20,7 @@ class SurfSpotDetails:
 
 pacifica_to_half_moon_bay = SurfSpotDetails(
     nbdc_bouy_id=46012,
-    noaa_tide_station_id=9414131,
+    noaa_tide_station_id=9413450,
     surfline_spot_id="5842041f4e65fad6a7708976",
 )
 
