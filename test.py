@@ -4,9 +4,9 @@ def test_request():
     request = {
         "request": {
             "type": "IntentRequest",
-            "requestId": "amzn1.echo-api.request.ddb2d07b-ede1-4f93-a2ff-b512ffe789ae",
+            "requestId": "amzn1.echo-api.request.40a07d17-8338-4bfc-9711-2df397043757",
             "locale": "en-US",
-            "timestamp": "2022-08-10T05:43:43Z",
+            "timestamp": "2022-08-14T01:02:38Z",
             "intent": {
                 "name": "get_conditions",
                 "confirmationStatus": "NONE",
@@ -32,13 +32,13 @@ def test_request():
                                 }
                             ]
                         },
-                        "confirmationStatus": "NONE",
+                        "confirmationStatus": "CONFIRMED",
                         "source": "USER"
                     }
                 }
             },
             "dialogState": "COMPLETED"
-	    }
+        }
     }
 
     print(lambda_handler(request, {}))

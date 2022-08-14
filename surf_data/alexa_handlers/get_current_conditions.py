@@ -31,7 +31,6 @@ class GetConditionsHandler(AbstractRequestHandler):
     """
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        print(f"You are trying to call can_handle from {__name__}")
         return ask_utils.is_intent_name("get_conditions")(handler_input)
 
     def handle(self, handler_input):
