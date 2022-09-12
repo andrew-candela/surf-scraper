@@ -46,6 +46,7 @@ STATIC_NOAA_PARAMS = {
     "format": "json",
 }
 
+
 @dataclass
 class TidePrediction:
     time: datetime
@@ -54,17 +55,18 @@ class TidePrediction:
 
 @dataclass
 class TideData:
-    tide_height: Decimal
-    tide_rate_of_change: Decimal
+    tide_height: str
+    tide_rate_of_change: str
 
     def serialize_for_alexa(self) -> str:
-        if self.tide_rate_of_change <= 0:
+        tide_change = float(self.tide_rate_of_change)
+        if tide_change <= 0:
             tide_diff_expression = "going out"
         else:
             tide_diff_expression = "coming in"
         return (
             f"The tide is currently {self.tide_height} feet and is {tide_diff_expression} at "
-            f"{abs(self.tide_rate_of_change)} feet per hour. "
+            f"{abs(tide_change)} feet per hour. "
         )
 
 
@@ -74,10 +76,12 @@ def parse_tide_prediction(prediction: Dict[str, str]) -> "TidePrediction":
     return TidePrediction(dt, level)
 
 
-def find_tide_change(current_minute: int, start: TidePrediction, end: TidePrediction) -> TideData:
+def find_tide_change(
+    current_minute: int, start: TidePrediction, end: TidePrediction
+) -> TideData:
     tide_interval = end.level - start.level
-    level = float(start.level) + (float(tide_interval) * (current_minute/60))
-    return TideData(round(level, 1), round(tide_interval, 1))
+    level = float(start.level) + (float(tide_interval) * (current_minute / 60))
+    return TideData(str(round(level, 1)), str(round(tide_interval, 1)))
 
 
 @dataclass
@@ -89,31 +93,35 @@ class TidePredictions:
         return TidePredictions(
             predictions=[parse_tide_prediction(p) for p in noaa_resp["predictions"]]
         )
-    
+
     def compute_tide_data(self, compute_time: datetime) -> TideData:
         """
         Find the hour before and after and then compute the "slope", as well as interpolate
         current level.
         """
-        rounded_time = compute_time.replace(minute=0, second=0, microsecond=0, tzinfo=None)
+        rounded_time = compute_time.replace(
+            minute=0, second=0, microsecond=0, tzinfo=None
+        )
         for i, prediction in enumerate(self.predictions):
             if prediction.time == rounded_time:
-                return find_tide_change(compute_time.minute, prediction, self.predictions[i+1])
+                return find_tide_change(
+                    compute_time.minute, prediction, self.predictions[i + 1]
+                )
         raise ValueError(
             f"There was no hourly interval containing your time of: {compute_time}"
         )
-            
 
 
-
-async def get_tide_data(session: ClientSession, station: int, start_date: datetime) -> TideData:
+async def get_tide_data(
+    session: ClientSession, station: int, start_date: datetime
+) -> TideData:
     begin_date = start_date - timedelta(days=1)
     end_date = start_date + timedelta(days=1)
     params = dict(
         **STATIC_NOAA_PARAMS,
         station=station,
         begin_date=begin_date.strftime(DT_SHORT_FORMAT),
-        end_date=end_date.strftime(DT_SHORT_FORMAT)
+        end_date=end_date.strftime(DT_SHORT_FORMAT),
     )
     logging.info("Sending request to NOAA for tide data")
     async with session.get(NOAA_URL, params=params) as resp:

@@ -7,13 +7,13 @@ from surf_data.lib.bouys import ConditionReport
 from surf_data.lib.tides import TideData
 from surf_data.lib.dynamo import SurfDiaryDB, DDB_DATE_FORMAT
 from surf_data.get_data import get_spot_data
-from surf_data import Spots
 import asyncio
 
 
 logging.basicConfig(
     level=os.getenv("LOG_LEVEL", "INFO"),
-    format="{levelname}:: {asctime}:: {filename}:: {message}", style="{"
+    format="{levelname}:: {asctime}:: {filename}:: {message}",
+    style="{",
 )
 
 
@@ -34,7 +34,7 @@ class LogEntry:
                 rating=self.rating,
                 notes=self.notes,
                 **asdict(self.wind_and_waves),
-                **asdict(self.tides)
+                **asdict(self.tides),
             )
         }
 
@@ -45,7 +45,9 @@ def prepare_and_submit_entry(entry_data: LogEntry) -> None:
     Gathers tide and wave data and submits the log entry to the database.
     """
     logging.info("Grabbing external data...")
-    conditions, tide = asyncio.run(get_spot_data(entry_data.spot_name))
+    conditions, tide = asyncio.run(
+        get_spot_data(entry_data.spot_name, entry_data.entry_date)
+    )
     entry_data.wind_and_waves = conditions
     entry_data.tides = tide
     db = SurfDiaryDB()
@@ -61,5 +63,14 @@ def get_latest_entry(spot):
 
 
 if __name__ == "__main__":
+    from surf_data import Spots
+
     # main({}, {})
-    get_latest_entry(Spots.pacifica.value)
+    # get_latest_entry(Spots.montara.value)
+    entry = LogEntry(
+        entry_date=datetime(2022, 9, 10, 17),
+        spot_name=Spots.montara.value,
+        rating="fair",
+        notes="Strong northward current. Discrete points where waves broke well. Good conditions.",
+    )
+    prepare_and_submit_entry(entry)

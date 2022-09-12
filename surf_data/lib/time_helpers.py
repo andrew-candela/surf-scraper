@@ -2,18 +2,21 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 import re
 
-ALEXA_TIME_ZONE_MAPPING = {
-    "PT": "America/Los_Angeles"
-}
+ALEXA_TIME_ZONE_MAPPING = {"PT": "America/Los_Angeles"}
 
 RELATIVE_TIME_REGEX = r"^(?P<tz>[^-]+)-(?P<diff>[^-]+)$"
 TIME_DIFF_REGEX = r"(\d)+(?P<unit>\D+)"
+UTC_TIME_ZONE = ZoneInfo("UTC")
+PST_TIME_ZONE = ZoneInfo("America/Los_Angeles")
+
 
 def get_current_time(timezone: str = None) -> datetime:
-    if timezone is None:
-        timezone = "America/Los_Angeles"
-    tz = ZoneInfo(timezone)
+    if timezone is not None:
+        tz = ZoneInfo(timezone)
+    else:
+        tz = PST_TIME_ZONE
     return datetime.now(tz)
+
 
 def parse_absolute_time(time_string: str) -> datetime:
     """
@@ -43,7 +46,6 @@ def map_time_to_datetime(date_val: str) -> datetime:
     matches = re.match(RELATIVE_TIME_REGEX, date_val)
     if matches is not None:
         return parse_relative_time(
-            matches.groupdict["tz"],
-            matches.groupdict["diff"]
+            matches.groupdict()["tz"], matches.groupdict()["diff"]
         )
     return parse_absolute_time(date_val)
