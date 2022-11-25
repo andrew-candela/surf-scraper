@@ -4,11 +4,12 @@ from typing import Dict, Optional
 
 
 class Spots(Enum):
-    pacifica="Pacifica State Beach"
-    montara="Montara State Beach"
-    rockaway="Rockaway State Beach"
-    princeton_jetty="Princeton Jetty"
-    ocean_beach="Ocean Beach"
+    pacifica = "Pacifica State Beach"
+    montara = "Montara State Beach"
+    rockaway = "Rockaway State Beach"
+    princeton_jetty = "Princeton Jetty"
+    ocean_beach = "Ocean Beach"
+    norcal_offshore = "Northern California Offshore"
 
 
 @dataclass
@@ -30,6 +31,10 @@ ocean_beach = SurfSpotDetails(
     surfline_spot_id="5842041f4e65fad6a77087f8",
 )
 
+norcal_offshore = SurfSpotDetails(
+    nbdc_bouy_id=46059, noaa_tide_station_id=9413450, surfline_spot_id=None
+)
+
 
 SPOT_MAPPING: Dict[str, SurfSpotDetails] = {
     Spots.pacifica.value: pacifica_to_half_moon_bay,
@@ -37,7 +42,9 @@ SPOT_MAPPING: Dict[str, SurfSpotDetails] = {
     Spots.rockaway.value: pacifica_to_half_moon_bay,
     Spots.princeton_jetty.value: pacifica_to_half_moon_bay,
     Spots.ocean_beach.value: ocean_beach,
+    Spots.norcal_offshore.value: norcal_offshore,
 }
+
 
 class DynamoDBConfig:
     TABLE_NAME = "SurfDiary"

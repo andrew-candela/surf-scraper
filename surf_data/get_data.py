@@ -23,11 +23,12 @@ async def get_spot_data(
 
 
 if __name__ == "__main__":
-    from surf_data.lib.time_helpers import PST_TIME_ZONE
+    # from surf_data.lib.time_helpers import PST_TIME_ZONE
 
     conditions, tide = asyncio.run(
-        get_spot_data(
-            Spots.pacifica.value, datetime(2022, 9, 10, 17, tzinfo=PST_TIME_ZONE)
-        )
+        # get_spot_data(
+        #     Spots.pacifica.value, datetime(2022, 9, 10, 17, tzinfo=PST_TIME_ZONE)
+        # )
+        get_spot_data(Spots.pacifica.value)
     )
-    print(tide.serialize_for_alexa())
+    print(conditions.serialize_for_alexa())
