@@ -1,4 +1,4 @@
-from surf_data.lib import bouys
+from surf_data.lib import buoys
 
 
 mock_ndbc_weather_report = (
@@ -68,19 +68,19 @@ def test_parse_report_header():
         "MWD",
     ]
     assert (
-        bouys.parse_report_header(mock_ndbc_weather_report.splitlines()[0])
+        buoys.parse_report_header(mock_ndbc_weather_report.splitlines()[0])
         == expected_weather_header
     )
     assert (
-        bouys.parse_report_header(mock_ndbc_wave_report.splitlines()[0])
+        buoys.parse_report_header(mock_ndbc_wave_report.splitlines()[0])
         == expected_wave_header
     )
 
 
 def test_parse_raw_weather_report():
-    expected_report = bouys.RawWeatherReport(
+    expected_report = buoys.RawWeatherReport(
         report_records=[
-            bouys.RawWeatherRecord(
+            buoys.RawWeatherRecord(
                 YY="2022",
                 MM="09",
                 DD="04",
@@ -101,7 +101,7 @@ def test_parse_raw_weather_report():
                 PTDY=None,
                 TIDE=None,
             ),
-            bouys.RawWeatherRecord(
+            buoys.RawWeatherRecord(
                 YY="2022",
                 MM="09",
                 DD="04",
@@ -126,5 +126,5 @@ def test_parse_raw_weather_report():
     )
     input_weather_report = "\n".join(mock_ndbc_weather_report.splitlines()[:4])
     assert (
-        bouys.RawWeatherReport.from_raw_report(input_weather_report) == expected_report
+        buoys.RawWeatherReport.from_raw_report(input_weather_report) == expected_report
     )

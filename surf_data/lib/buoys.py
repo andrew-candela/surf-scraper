@@ -1,5 +1,5 @@
 """
-Grab bouy data from noaa.gov.
+Grab buoy data from noaa.gov.
 We'll parse out the station data in this file and
 return a dict of all the possible current metrics.
 
@@ -11,7 +11,7 @@ Station IDs for neaby Pacifica are:
     46012: way southwest of Pacifica
 }
 
-For a given bouy ID (station) we'll grab the raw data for
+For a given buoy ID (station) we'll grab the raw data for
  - weather (.txt)
  - waves   (.spec)
 
@@ -112,7 +112,7 @@ def get_closest_record(
             int(rec.DD.measure),
             int(rec.hh.measure),
             int(rec.mm.measure),
-            tzinfo=UTC_TIME_ZONE,  # Bouy data is in UTC
+            tzinfo=UTC_TIME_ZONE,  # Buoy data is in UTC
         ).timestamp()
         if abs(rec_date - desired_seconds) > min_date_diff:
             break

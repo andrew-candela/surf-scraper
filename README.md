@@ -3,7 +3,7 @@
 An Alexa skill that helps me log surf sessions when I get home.
 
 The idea here is to log my experience for a session and combine that with
-the bouy, wind and tide data for that spot (or close to it) at that time.
+the buoy, wind and tide data for that spot (or close to it) at that time.
 
 There's also an intent that reports current conditions for the spot I request.
 

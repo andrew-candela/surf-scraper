@@ -14,25 +14,25 @@ class Spots(Enum):
 
 @dataclass
 class SurfSpotDetails:
-    nbdc_bouy_id: int
+    nbdc_buoy_id: int
     noaa_tide_station_id: int
     surfline_spot_id: Optional[str]
 
 
 pacifica_to_half_moon_bay = SurfSpotDetails(
-    nbdc_bouy_id=46012,
+    nbdc_buoy_id=46012,
     noaa_tide_station_id=9413450,
     surfline_spot_id="5842041f4e65fad6a7708976",
 )
 
 ocean_beach = SurfSpotDetails(
-    nbdc_bouy_id=46237,
+    nbdc_buoy_id=46237,
     noaa_tide_station_id=9414290,
     surfline_spot_id="5842041f4e65fad6a77087f8",
 )
 
 norcal_offshore = SurfSpotDetails(
-    nbdc_bouy_id=46059, noaa_tide_station_id=9413450, surfline_spot_id=None
+    nbdc_buoy_id=46059, noaa_tide_station_id=9413450, surfline_spot_id=None
 )
 
 

@@ -1,4 +1,4 @@
-from surf_data.lib.bouys import get_station_data, ConditionReport
+from surf_data.lib.buoys import get_station_data, ConditionReport
 from surf_data.lib.tides import TideData, get_tide_data
 from surf_data.lib.time_helpers import get_current_time
 from surf_data import SPOT_MAPPING, Spots
@@ -16,7 +16,7 @@ async def get_spot_data(
         start_time = get_current_time()
     async with ClientSession(raise_for_status=True) as session:
         results = await asyncio.gather(
-            get_station_data(session, surf_spot.nbdc_bouy_id, start_time),
+            get_station_data(session, surf_spot.nbdc_buoy_id, start_time),
             get_tide_data(session, surf_spot.noaa_tide_station_id, start_time),
         )
     return results

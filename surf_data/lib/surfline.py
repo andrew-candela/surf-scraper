@@ -1,6 +1,6 @@
 """
 Get some data from the Surfline API.
-We'll see how it compares to the raw bouy and tide data.
+We'll see how it compares to the raw buoy and tide data.
 
 https://services.surfline.com/kbyg/spots/forecasts/{type}?{params}
 

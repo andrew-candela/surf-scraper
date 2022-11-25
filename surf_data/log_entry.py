@@ -3,7 +3,7 @@ import logging
 import os
 from datetime import datetime
 from typing import Any, Dict, Optional
-from surf_data.lib.bouys import ConditionReport
+from surf_data.lib.buoys import ConditionReport
 from surf_data.lib.tides import TideData
 from surf_data.lib.dynamo import SurfDiaryDB, DDB_DATE_FORMAT
 from surf_data.get_data import get_spot_data
