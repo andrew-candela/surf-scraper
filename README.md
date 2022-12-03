@@ -1,4 +1,4 @@
-# Surf Diaries
+# Surf Butler
 
 An Alexa skill that helps me log surf sessions when I get home.
 
@@ -9,7 +9,7 @@ There's also an intent that reports current conditions for the spot I request.
 
 ## Approach
 
-"Alexa, open surf diary"
+"Alexa, open surf butler"
 "Log an entry for {spot} at {time}"
 "Waves were soft, wind roughed things up etc etc"
 
@@ -27,3 +27,6 @@ The value will be a dictionary:
     notes
     conditions: weather, wave and tide
     etc
+
+I'm updating the lambda function configuration manually for now in the
+[alexa developer console](https://developer.amazon.com/alexa/console/ask).
