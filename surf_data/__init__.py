@@ -9,7 +9,7 @@ class Spots(Enum):
     rockaway = "Rockaway State Beach"
     princeton_jetty = "Princeton Jetty"
     ocean_beach = "Ocean Beach"
-    norcal_offshore = "Northern California Offshore"
+    norcal_offshore = "Northern California Offshore Buoy"
 
 
 @dataclass
@@ -31,6 +31,8 @@ ocean_beach = SurfSpotDetails(
     surfline_spot_id="5842041f4e65fad6a77087f8",
 )
 
+# This buoy is 357 NM west of SF
+# see https://www.ndbc.noaa.gov/station_page.php?station=46059
 norcal_offshore = SurfSpotDetails(
     nbdc_buoy_id=46059, noaa_tide_station_id=9413450, surfline_spot_id=None
 )
