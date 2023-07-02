@@ -30,11 +30,13 @@ import re
 from datetime import datetime
 from dataclasses import dataclass
 from aiohttp import ClientSession
+from aiohttp.client_exceptions import ClientResponseError
 import logging
 from typing import List, Literal, Optional, Type, TypeVar, Union
 from enum import Enum
 from surf_data.lib.time_helpers import get_current_time, UTC_TIME_ZONE
 from surf_data.lib.record_helpers import DataPoint
+from surf_data import SurfSpotDetails
 
 
 NDBC_BASE_URL = "https://www.ndbc.noaa.gov/data/realtime2/"
@@ -105,7 +107,9 @@ def get_closest_record(
     """
     min_date_diff = float("inf")
     desired_seconds = desired_time.timestamp()
+    current_rec = None
     for rec in report.report_records:
+        current_rec = rec
         rec_date = datetime(
             int(rec.YY.measure),
             int(rec.MM.measure),
@@ -116,8 +120,9 @@ def get_closest_record(
         ).timestamp()
         if abs(rec_date - desired_seconds) > min_date_diff:
             break
-        current_rec = rec
         min_date_diff = abs(rec_date - desired_seconds)
+    if current_rec is None:
+        raise ValueError("Could not find a closest record")
     return current_rec
 
 
@@ -167,7 +172,7 @@ T = TypeVar("T", RawWaveRecord, RawWeatherRecord)
 
 @dataclass
 class RawReport:
-    report_records: Union[List[RawWeatherRecord], List[RawWaveRecord]]
+    report_records: list[RawWeatherRecord] | list[RawWaveRecord]
 
     @classmethod
     def from_raw_report(
@@ -178,7 +183,7 @@ class RawReport:
         report_lines = raw_report.splitlines()
         header = parse_report_header(report_lines[0])
         units = parse_report_header(report_lines[1])
-        report_records: List[T] = []
+        report_records = []
         for record in report_lines[2:]:
             processed_record = re.split(r"\s+", record)
             report_records.append(
@@ -236,6 +241,7 @@ class ConditionReport:
 async def _get_raw_station_data(
     session: ClientSession,
     station_id: int,
+    fallback_station_id: int,
     report_type: Literal[NDBCDataTypes.waves, NDBCDataTypes.weather],
 ) -> str:
     """
@@ -252,24 +258,42 @@ async def _get_raw_station_data(
         NDBCDataTypes.weather.value: "txt",
         NDBCDataTypes.waves.value: "spec",
     }
-    station_url = (
-        f"{NDBC_BASE_URL}{station_id}.{report_to_extension_map[report_type.value]}"
-    )
-    logging.info(f"Hitting: {station_url}")
-    async with session.get(station_url) as resp:
-        return await resp.text()
+    try:
+        station_url = (
+            f"{NDBC_BASE_URL}{station_id}.{report_to_extension_map[report_type.value]}"
+        )
+        logging.info(f"Hitting: {station_url}")
+        async with session.get(station_url) as resp:
+            return await resp.text()
+    except ClientResponseError:
+        logging.error(
+            f"Error getting data from station {station_id}. Falling back to station {fallback_station_id}."
+        )
+        station_url = f"{NDBC_BASE_URL}{fallback_station_id}.{report_to_extension_map[report_type.value]}"
+        logging.info(f"Hitting: {station_url}")
+        async with session.get(station_url) as resp:
+            return await resp.text()
 
 
 async def get_station_data(
-    session: ClientSession, station_id: int, rep_time: Optional[datetime] = None
+    session: ClientSession,
+    station: SurfSpotDetails,
+    rep_time: Optional[datetime] = None,
 ) -> ConditionReport:
     raw_weather, raw_waves = await gather(
-        _get_raw_station_data(session, station_id, NDBCDataTypes.weather),
-        _get_raw_station_data(session, station_id, NDBCDataTypes.waves),
+        _get_raw_station_data(
+            session,
+            station.nbdc_buoy_id,
+            station.fallback_buoy_id,
+            NDBCDataTypes.weather,
+        ),
+        _get_raw_station_data(
+            session, station.nbdc_buoy_id, station.fallback_buoy_id, NDBCDataTypes.waves
+        ),
     )
     if rep_time is None:
         rep_time = get_current_time()
-    condition_report = ConditionReport(station_id=station_id)
+    condition_report = ConditionReport(station_id=station.nbdc_buoy_id)
     weather_report = RawReport.from_raw_report(raw_weather, RawWeatherRecord)
     wave_report = RawReport.from_raw_report(raw_waves, RawWaveRecord)
     weather_record = get_closest_record(weather_report, rep_time)

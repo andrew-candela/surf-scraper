@@ -33,5 +33,5 @@ I'm updating the lambda function configuration manually for now in the
 
 ## ToDo
 
-- Handle missing data more gracefully.
-A buoy that no longer publishes data will currently break the app.
+- indicate buoy positions when doing spot reports.
+Currently the user can't tell which buoy the reading came from.

@@ -30,6 +30,7 @@ from aiohttp import ClientSession
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 import logging
+from surf_data import SurfSpotDetails
 
 
 DT_FORMAT = "%Y-%m-%d %H:%M"
@@ -113,13 +114,13 @@ class TidePredictions:
 
 
 async def get_tide_data(
-    session: ClientSession, station: int, start_date: datetime
+    session: ClientSession, spot: SurfSpotDetails, start_date: datetime
 ) -> TideData:
     begin_date = start_date - timedelta(days=1)
     end_date = start_date + timedelta(days=1)
     params = dict(
         **STATIC_NOAA_PARAMS,
-        station=station,
+        station=spot.noaa_tide_station_id,
         begin_date=begin_date.strftime(DT_SHORT_FORMAT),
         end_date=end_date.strftime(DT_SHORT_FORMAT),
     )
