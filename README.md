@@ -30,3 +30,8 @@ The value will be a dictionary:
 
 I'm updating the lambda function configuration manually for now in the
 [alexa developer console](https://developer.amazon.com/alexa/console/ask).
+
+## ToDo
+
+- Handle missing data more gracefully.
+A buoy that no longer publishes data will currently break the app.

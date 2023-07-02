@@ -8,7 +8,7 @@ Station IDs for neaby Pacifica are:
     46237: outside Golden Gate - north of Pacifica.
            Might be the best indication of Pacifica Conditions,
     46026: east of farallones - Northwest of Pacifica,
-    46012: way southwest of Pacifica
+    46012: way southwest of Pacifica -- doesn't seem to be working.
 }
 
 For a given buoy ID (station) we'll grab the raw data for

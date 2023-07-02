@@ -20,7 +20,8 @@ class SurfSpotDetails:
 
 
 pacifica_to_half_moon_bay = SurfSpotDetails(
-    nbdc_buoy_id=46012,
+    # nbdc_buoy_id=46012, # the half moon bay buoy seems to no longer work.
+    nbdc_buoy_id=46237,
     noaa_tide_station_id=9413450,
     surfline_spot_id="5842041f4e65fad6a7708976",
 )
